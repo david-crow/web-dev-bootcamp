@@ -71,7 +71,6 @@ app.post("/", (req, res) => {
             redirect(res, `/${listName}`);
         });
     };
-
 });
 
 // delete items
