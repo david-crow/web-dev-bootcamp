@@ -1,16 +1,29 @@
+// load libraries
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
+const encrypt = require("mongoose-encryption");
 
+// initialize app
 const app = express();
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// initialize database
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb://localhost:27017/userDB");
-const User = new mongoose.model("User", { email: String, password: String });
+
+// define database schema
+const userSchema = new mongoose.Schema({ email: String, password: String });
+userSchema.plugin(encrypt, {
+    secret: "This is a secret string.",
+    encryptedFields: ["password"],
+});
+const User = new mongoose.model("User", userSchema);
+
+// define behavior for each route
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -54,6 +67,11 @@ app.route("/register")
         });
     });
 
+app.get("/logout", (req, res) => {
+    res.redirect("/");
+});
+
+// host the app
 app.listen(3000, () => {
     console.log("Server started on port 3000.");
 });
