@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // database setup
-mongoose.connect("mongodb://localhost:27017/wikiDB", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost:27017/wikiDB");
 const Article = mongoose.model("Article", { title: String, content: String });
 
 // all articles
