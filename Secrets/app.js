@@ -1,4 +1,5 @@
 // load libraries
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -18,7 +19,7 @@ mongoose.connect("mongodb://localhost:27017/userDB");
 // define database schema
 const userSchema = new mongoose.Schema({ email: String, password: String });
 userSchema.plugin(encrypt, {
-    secret: "This is a secret string.",
+    secret: process.env.SECRET,
     encryptedFields: ["password"],
 });
 const User = new mongoose.model("User", userSchema);
